@@ -7,7 +7,7 @@ import sqlite3
 # Return: None
 # What it does: Creates the Dictionary Table if it does not exist
 def createDicTable(cursor):
-	cursor.execute('CREATE TABLE IF NOT EXISTS Dictionary(dutchWord TEXT, engWord TEXT)')	
+	cursor.execute('CREATE TABLE IF NOT EXISTS Dictionary(dutchWord TEXT, engWord TEXT, CONSTRAINT Dictionary_PK PRIMARY KEY (dutchWord,engWord))')	
 
 # Function Name : Home Screen
 # Parameters: 
@@ -77,9 +77,14 @@ def insertWords(connection,cursor):
 	unusedSysReturn = os.system('clear')
 	dutchWord = input("Insert the Word in Dutch: ")
 	engWord = input("Insert its english translation: ")
-	cursor.execute('INSERT INTO Dictionary (dutchWord,engWord) VALUES(?,?)', (dutchWord,engWord))
-	connection.commit()
-	print('Success!')
+	try:
+		cursor.execute('INSERT INTO Dictionary (dutchWord,engWord) VALUES(?,?)', (dutchWord,engWord))
+		connection.commit()
+		print('Success!')
+	except Exception as e:
+		print('\nAn error ocurred while inserting the words on the Dictionary.\n')
+		print('\t\t\tThe error was:\n')
+		print(e)
 	trash = input('')
 
 def removeLineDutch(connection,cursor):

@@ -1,0 +1,19 @@
+PRAGMA foreign_keys=off;
+
+ALTER TABLE Dictionary RENAME TO old_dictionary;
+
+CREATE TABLE Dictionary
+(
+  dutchWord TEXT NOT NULL,
+  engWord TEXT NOT NULL,
+  
+  CONSTRAINT DICTIONARY_PK PRIMARY KEY (dutchWord,engWord)
+);
+
+INSERT INTO Dictionary SELECT * FROM old_dictionary;
+
+COMMIT;
+
+PRAGMA foreign_keys=on;
+
+DROP TABLE old_dictionary;
