@@ -26,6 +26,7 @@ def homeScreen(loop,connection,cursor):
 	print('\t\t1 - Search for a word in Dutch.')
 	print('\t\t2 - Search for a word in English.')
 	print('\t\t3 - Insert new vocabulary.')
+	print('\t\t4 - Remove a word in Dutch and all of its translations.')
 	print('\t\t0 - Quit Program.\n')
 
 	chosenOption = input("\t\tChoose an option: ")
@@ -45,6 +46,11 @@ def homeScreen(loop,connection,cursor):
 		# Permits the insertion of a word and its translation
 		insertWords(connection,cursor)
 		# keeps the main screen loop afterwards
+		return loop
+	elif(chosenOption == 4):
+		# Remove a Dutch Word and its translations
+		removeLineDutch(connection,cursor)
+		# keeps the main screen looop afterwards
 		return loop
 	elif(chosenOption == 0):
 		# Exits the program
@@ -72,6 +78,14 @@ def insertWords(connection,cursor):
 	dutchWord = input("Insert the Word in Dutch: ")
 	engWord = input("Insert its english translation: ")
 	cursor.execute('INSERT INTO Dictionary (dutchWord,engWord) VALUES(?,?)', (dutchWord,engWord))
+	connection.commit()
+	print('Success!')
+	trash = input('')
+
+def removeLineDutch(connection,cursor):
+	unusedSysReturn = os.system('clear')
+	dutchWord = input('Insert the Word in Dutch to be removed with all of its translations: ')
+	cursor.execute('DELETE FROM Dictionary WHERE dutchWord=?', (dutchWord,))
 	connection.commit()
 	print('Success!')
 	trash = input('')
