@@ -31,30 +31,33 @@ class Model():
 	
 	def getHomeScreenOp(self):
 		return self.homeScreenOp
-		
+
+	# Retrieves all tuples  in the database which contains the searched dutch word 		
 	def retrieveDutchTrans(self,word):
 		dutchWord = (word,)
 		resultList = []
 		conn = sqlite3.connect('DutchEngDic.db')	# Opens and returns a connection the the Dictionary Database
-		dbCursor = conn.cursor()					# Creates and returns a cursor to manipulate de Database
+		dbCursor = conn.cursor()					# Creates and returns a cursor to manipulate the Database
 		for row in dbCursor.execute('SELECT * FROM Dictionary WHERE dutchWord=? COLLATE NOCASE', dutchWord):
 			resultList.append(row)
 		conn.close()
 		self.viewPointer.printDutchResult(resultList)
 
+	# Retrieves all tuples  in the database which contains the searched english word 
 	def retrieveEngTrans(self,word):
 		engWord = (word,)
 		resultList = []
 		conn = sqlite3.connect('DutchEngDic.db')	# Opens and returns a connection the the Dictionary Database
-		dbCursor = conn.cursor()					# Creates and returns a cursor to manipulate de Database
+		dbCursor = conn.cursor()					# Creates and returns a cursor to manipulate the Database
 		for row in dbCursor.execute('SELECT * FROM Dictionary WHERE engWord=? COLLATE NOCASE', engWord):
 			resultList.append(row)
 		conn.close()
 		self.viewPointer.printEngResult(resultList)
 
+	# Connects to the dictionary database and inserts a dutchWord with its engWord translation
 	def newEntry(self,dutchWord,engWord):
 		conn = sqlite3.connect('DutchEngDic.db')	# Opens and returns a connection the the Dictionary Database
-		dbCursor = conn.cursor()					# Creates and returns a cursor to manipulate de Database
+		dbCursor = conn.cursor()					# Creates and returns a cursor to manipulate the Database
 		try:
 			dbCursor.execute('INSERT INTO Dictionary (dutchWord,engWord) VALUES(?,?)', (dutchWord,engWord))
 			conn.commit()
@@ -66,9 +69,10 @@ class Model():
 		conn.close()
 		trash = input('')
 
+	# Connects to the dictionary database and removes all tuples which contains dutchWord
 	def dutchRemoval(self,dutchWord):
 		conn = sqlite3.connect('DutchEngDic.db')	# Opens and returns a connection the the Dictionary Database
-		dbCursor = conn.cursor()					# Creates and returns a cursor to manipulate de Database
+		dbCursor = conn.cursor()					# Creates and returns a cursor to manipulate the Database
 		try:
 			dbCursor.execute('DELETE FROM Dictionary WHERE dutchWord=?', (dutchWord,))
 			conn.commit()
